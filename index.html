@@ -96,12 +96,19 @@ function showQuestion() {
 }
 
 function answer(input) {
+
   if (!startTime) {
     startTime = Date.now();
   }
 
-  current++;
-  showQuestion();
+  let index = order[current];
+  let correctAnswer = notes[index];
+
+  if (input === correctAnswer) {
+    current++;
+    showQuestion();
+  }
+
 }
 
 function endGame() {
