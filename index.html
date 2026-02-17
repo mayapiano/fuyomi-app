@@ -85,10 +85,17 @@ function shuffle() {
 }
 
 function showQuestion() {
+
+  // ボタンの色をリセット
+  document.querySelectorAll(".buttons button").forEach(btn => {
+    btn.style.backgroundColor = "";
+  });
+
   if (current >= 29) {
     endGame();
     return;
   }
+
   let index = order[current];
   let fileNumber = String(index + 1).padStart(2, '0');
   img.src = fileNumber + ".jpg";
@@ -112,23 +119,33 @@ function answer(input) {
 }
 
 function endGame() {
-  let totalTime = (Date.now() - startTime) / 1000;
-  totalTime = totalTime.toFixed(1);
 
-  img.style.display = "none";
-  document.querySelector(".buttons").style.display = "none";
+ let totalSeconds = Math.floor((Date.now() - startTime) / 1000);
 
-  let message = "";
+ let minutes = Math.floor(totalSeconds / 60);
+ let seconds = totalSeconds % 60;
 
-  if (totalTime <= 60) {
-    message = "🎉 1分以内達成！<br>あなたのタイム：" + totalTime + "秒";
-  } else {
-    let diff = (totalTime - 60).toFixed(1);
-    message = "あと" + diff + "秒！<br>あなたのタイム：" + totalTime + "秒";
-  }
+ img.style.display = "none";
+ document.querySelector(".buttons").style.display = "none";
 
-  result.innerHTML = message +
-    "<br><button id='restartBtn' onclick='restartGame()'>もう一回チャレンジ</button>";
+ let timeText = "";
+
+ if (minutes > 0) {
+   timeText = minutes + "分" + seconds + "秒";
+ } else {
+   timeText = seconds + "秒";
+ }
+
+ let message = "";
+
+ if (totalSeconds <= 60) {
+   message = "🎉 1分以内達成！<br>あなたのタイム：" + timeText;
+ } else {
+   message = "あなたのタイム：" + timeText;
+ }
+
+ result.innerHTML = message +
+   "<br><button id='restartBtn' onclick='restartGame()'>もう一回チャレンジ</button>";
 }
 
 function restartGame() {
